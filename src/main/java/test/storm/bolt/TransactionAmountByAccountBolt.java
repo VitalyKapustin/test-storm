@@ -36,7 +36,6 @@ public class TransactionAmountByAccountBolt extends BaseRichBolt {
         List<Transaction> transactions = (List<Transaction>) input.getValueByField("periodTransactions");
         double sum = transactions.parallelStream().filter(p -> p.getAccount().equals(transaction.getAccount())).mapToDouble(p -> p.getAmount()).sum();
         _collector.emit(input, new Values(transaction, "account", sum));
-        _collector.ack(input);
     }
 
     @Override

@@ -42,7 +42,6 @@ public class PeriodTransactionsBolt extends BaseRichBolt {
     public void execute(Tuple input) {
         List<Transaction> periodTransactions = repository.listByDatePeriod(DateTime.now().minusDays(9).toDate(), new Date());
         _collector.emit(input, new Values(input.getValues().get(0), periodTransactions));
-        _collector.ack(input);
     }
 
     @Override

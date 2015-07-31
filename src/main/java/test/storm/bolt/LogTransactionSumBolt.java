@@ -33,6 +33,7 @@ public class LogTransactionSumBolt extends BaseRichBolt {
         String byField = String.valueOf(input.getValueByField("byField"));
         double sum = (double) input.getValueByField("sum");
         LOG.debug(new StringBuilder(transaction.toString()).append(" sum by ").append(byField).append(" = ").append(sum));
+        _collector.ack(input);
     }
 
     @Override
