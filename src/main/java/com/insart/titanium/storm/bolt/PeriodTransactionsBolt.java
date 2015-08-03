@@ -1,4 +1,4 @@
-package test.storm.bolt;
+package com.insart.titanium.storm.bolt;
 
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
@@ -7,15 +7,15 @@ import backtype.storm.topology.base.BaseRichBolt;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
+import com.couchbase.client.protocol.views.ComplexKey;
+import com.couchbase.client.protocol.views.Query;
+import com.insart.titanium.storm.entity.Transaction;
+import com.insart.titanium.storm.util.ApplicationContextUtils;
+import com.insart.titanium.storm.util.CommonUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import test.repository.FakeTransactionRepository;
-import test.storm.entity.Transaction;
 
-import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,10 +28,6 @@ public class PeriodTransactionsBolt extends BaseRichBolt {
 
     private OutputCollector _collector;
 
-    @Autowired
-    private FakeTransactionRepository repository;
-
-
     @Override
     public void prepare(Map stormConf, TopologyContext context, OutputCollector collector) {
         _collector = collector;
@@ -39,9 +35,11 @@ public class PeriodTransactionsBolt extends BaseRichBolt {
 
     @Override
     public void execute(Tuple input) {
-        List<Transaction> periodTransactions = repository.listByDatePeriod(DateTime.now().minusDays(9).toDate(), new Date());
-        _collector.emit(input, new Values(input.getValues().get(0), periodTransactions));
-        _collector.ack(input);
+        Query query = new Query();
+        query.setRangeStart(ComplexKey.of(DateTime.now().minusDays(9).getMillis()));
+        query.setRangeEnd(ComplexKey.of(DateTime.now().getMillis()));
+        LOG.debug(CommonUtils.getLogMessage(PeriodTransactionsBolt.class, (Transaction) input.getValues().get(0)));
+        _collector.emit(input, new Values(input.getValues().get(0), ApplicationContextUtils.getGenericRepository().findByDate(query)));
     }
 
     @Override

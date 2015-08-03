@@ -1,4 +1,4 @@
-package test.storm.entity;
+package com.insart.titanium.storm.entity;
 
 import org.springframework.data.annotation.Id;
 
@@ -10,13 +10,13 @@ import java.io.Serializable;
 public class GenericEntity implements Serializable {
 
     @Id
-    private Long id;
+    private String id;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 }

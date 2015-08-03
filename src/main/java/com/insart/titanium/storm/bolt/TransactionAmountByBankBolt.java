@@ -1,4 +1,4 @@
-package test.storm.bolt;
+package com.insart.titanium.storm.bolt;
 
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
@@ -7,9 +7,10 @@ import backtype.storm.topology.base.BaseRichBolt;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
+import com.insart.titanium.storm.util.CommonUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
-import test.storm.entity.Transaction;
+import com.insart.titanium.storm.entity.Transaction;
 
 import java.util.List;
 import java.util.Map;
@@ -33,9 +34,9 @@ public class TransactionAmountByBankBolt extends BaseRichBolt {
     public void execute(Tuple input) {
         Transaction transaction = (Transaction) input.getValueByField("transaction");
         List<Transaction> transactions = (List<Transaction>) input.getValueByField("periodTransactions");
-        double sum = transactions.parallelStream().filter(p -> p.getBank().equals(transaction.getBank())).mapToDouble(p -> p.getAmount()).sum();
+        double sum = transactions.parallelStream().filter(p -> !p.equals(transaction) && p.getBank().equals(transaction.getBank())).mapToDouble(p -> p.getAmount()).sum();
+        LOG.debug(CommonUtils.getLogMessage(TransactionAmountByBankBolt.class, transaction));
         _collector.emit(input, new Values(transaction, "bank", sum));
-        _collector.ack(input);
     }
 
     @Override

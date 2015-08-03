@@ -1,9 +1,8 @@
-package test.storm.entity;
+package com.insart.titanium.storm.entity;
 
+import com.couchbase.client.java.repository.annotation.Field;
 import org.springframework.data.couchbase.core.mapping.Document;
-import org.springframework.data.couchbase.core.mapping.Field;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -40,6 +39,35 @@ public class Transaction extends GenericEntity {
     @Override
     public String toString() {
         return new StringBuilder("Transaction [id=").append(getId()).append(", customer=").append(customer).append(", account=").append(account).append(", bank=").append(bank).append(", amount=").append(amount).append(", date=").append(date).append("]").toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Transaction)) return false;
+
+        Transaction that = (Transaction) o;
+
+        if (Double.compare(that.amount, amount) != 0) return false;
+        if (!account.equals(that.account)) return false;
+        if (!bank.equals(that.bank)) return false;
+        if (!customer.equals(that.customer)) return false;
+        if (!date.equals(that.date)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = customer.hashCode();
+        result = 31 * result + account.hashCode();
+        result = 31 * result + bank.hashCode();
+        temp = Double.doubleToLongBits(amount);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + date.hashCode();
+        return result;
     }
 
     public String getCustomer() {

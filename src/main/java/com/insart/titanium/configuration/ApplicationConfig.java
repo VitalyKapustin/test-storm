@@ -1,52 +1,57 @@
-package test.configuration;
+package com.insart.titanium.configuration;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.data.couchbase.config.AbstractCouchbaseConfiguration;
 import org.springframework.data.couchbase.repository.config.EnableCouchbaseRepositories;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Created by Kapustin Vitaly on 8/1/15.
  */
 @Configuration
-@ComponentScan("test")
-@PropertySource({ "classpath:application.properties" })
-@EnableCouchbaseRepositories(basePackages = "test.repository", repositoryImplementationPostfix = "Custom")
+@ComponentScan("com.insart.titanium")
+@PropertySource("classpath:application.properties")
+@EnableCouchbaseRepositories(basePackages = "com.insart.titanium.repository", repositoryImplementationPostfix = "CustomImpl")
 public class ApplicationConfig extends AbstractCouchbaseConfiguration {
 
     @Value("${couchbase.host}")
-    private String couchbaseHost;
+    private String COUCHBASE_HOST;
 
     @Value("${couchbase.bucket.name}")
-    private String couchbaseBucketName;
+    private String COUCHBASE_BUCKET_NAME;
 
     @Value("${couchbase.password}")
-    private String couchbasePassword;
+    private String COUCHBASE_PASSWORD;
 
     @Bean
-    public PropertyPlaceholderConfigurer getPropertyPlaceholderConfigurer() {
-        return new PropertyPlaceholderConfigurer();
+    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
+    }
+
+    @Bean
+    public ApplicationContextProvider getApplicationContextProvider() {
+        return new ApplicationContextProvider();
     }
 
     @Override
     protected List<String> bootstrapHosts() {
-        return Arrays.asList(couchbaseHost);
+        return Collections.singletonList(COUCHBASE_HOST);
     }
 
     @Override
     protected String getBucketName() {
-        return couchbaseBucketName;
+        return COUCHBASE_BUCKET_NAME;
     }
 
     @Override
     protected String getBucketPassword() {
-        return couchbasePassword;
+        return COUCHBASE_PASSWORD;
     }
 }

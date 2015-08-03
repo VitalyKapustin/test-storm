@@ -1,4 +1,4 @@
-package test.storm;
+package com.insart.titanium.storm;
 
 import backtype.storm.Config;
 import backtype.storm.LocalCluster;
@@ -8,11 +8,10 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
-import test.configuration.ApplicationConfig;
-import test.storm.bolt.*;
-import test.storm.spout.TransactionSpout;
+import com.insart.titanium.configuration.ApplicationConfig;
+import com.insart.titanium.storm.bolt.*;
+import com.insart.titanium.storm.spout.TransactionSpout;
 
 /**
  * Created by v.kapustin on 7/30/15.
@@ -65,9 +64,9 @@ public class StartUp {
         Config conf = new Config();
         conf.setDebug(false);
         LocalCluster localCluster = new LocalCluster();
-        localCluster.submitTopology("test", conf, builder.createTopology());
-        Utils.sleep(10000);
-        localCluster.killTopology("test");
+        localCluster.submitTopology("com", conf, builder.createTopology());
+        Utils.sleep(1000 * 60 * 10);
+        localCluster.killTopology("com");
         localCluster.shutdown();
     }
 }

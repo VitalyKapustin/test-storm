@@ -1,4 +1,4 @@
-package test.storm.spout;
+package com.insart.titanium.storm.spout;
 
 import backtype.storm.spout.SpoutOutputCollector;
 import backtype.storm.task.TopologyContext;
@@ -7,11 +7,13 @@ import backtype.storm.topology.base.BaseRichSpout;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Values;
 import backtype.storm.utils.Utils;
+import com.insart.titanium.storm.util.CommonUtils;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import test.storm.entity.Transaction;
-import test.storm.util.TransactionGenerator;
+import com.insart.titanium.storm.entity.Transaction;
+import com.insart.titanium.storm.util.TransactionGenerator;
 
 import java.util.Map;
 
@@ -44,9 +46,10 @@ public class TransactionSpout extends BaseRichSpout {
 
     @Override
     public void nextTuple() {
-        Utils.sleep(100);
-        Transaction transaction = transactionGenerator.generate(UNIQUE_CUSTOMER_QUANTITY, UNIQUE_ACCOUNT_QUANTITY, UNIQUE_BANK_QUANTITY);
-        LOG.debug("Transaction has been generated: " + transaction);
+        Utils.sleep(4000);
+        Transaction transaction = transactionGenerator.generate(UNIQUE_CUSTOMER_QUANTITY, UNIQUE_ACCOUNT_QUANTITY, UNIQUE_BANK_QUANTITY, DateTime.now().minusDays(9).toDate(), DateTime.now().toDate());
+//        LOG.debug("Transaction has been generated: " + transaction);
+        LOG.debug(CommonUtils.getLogMessage(TransactionSpout.class, transaction));
         _collector.emit(new Values(transaction));
     }
 }
