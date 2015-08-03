@@ -1,6 +1,5 @@
 package test.storm.bolt;
 
-import backtype.storm.spout.SpoutOutputCollector;
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.OutputFieldsDeclarer;
@@ -12,8 +11,8 @@ import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import test.repository.FakeTransactionRepository;
 import test.storm.entity.Transaction;
-import test.storm.repository.FakeTransactionRepository;
 
 import java.util.Date;
 import java.util.List;

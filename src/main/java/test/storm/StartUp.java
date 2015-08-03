@@ -7,13 +7,11 @@ import backtype.storm.utils.Utils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
-import test.storm.bolt.LogTransactionSumBolt;
-import test.storm.bolt.PeriodTransactionsBolt;
-import test.storm.bolt.TransactionAmountByAccountBolt;
-import test.storm.bolt.TransactionAmountByBankBolt;
-import test.storm.bolt.TransactionAmountByCustomerBolt;
+import test.configuration.ApplicationConfig;
+import test.storm.bolt.*;
 import test.storm.spout.TransactionSpout;
 
 /**
@@ -26,6 +24,9 @@ public class StartUp {
 
     @Autowired
     private TransactionSpout transactionSpout;
+
+    @Autowired
+    private SaveTransactionBolt saveTransactionBolt;
 
     @Autowired
     private PeriodTransactionsBolt periodTransactionsBolt;
@@ -43,7 +44,7 @@ public class StartUp {
     private LogTransactionSumBolt logTransactionSumBolt;
 
     public static void main(String[] args) {
-        ApplicationContext ctx = new ClassPathXmlApplicationContext("application.xml");
+        ApplicationContext ctx = new AnnotationConfigApplicationContext(ApplicationConfig.class);
         StartUp startUp = ctx.getBean(StartUp.class);
         startUp.start();
     }
@@ -51,6 +52,7 @@ public class StartUp {
     public void start() {
         TopologyBuilder builder = new TopologyBuilder();
         builder.setSpout("transactions", transactionSpout);
+        builder.setBolt("saveTransaction", saveTransactionBolt).shuffleGrouping("transactions");
         builder.setBolt("periodTransactions", periodTransactionsBolt, 3).shuffleGrouping("transactions");
         builder.setBolt("transactionAmountByCustomer", transactionAmountByCustomerBolt, 7).shuffleGrouping("periodTransactions");
         builder.setBolt("transactionAmountByBank", transactionAmountByBankBolt, 7).shuffleGrouping("periodTransactions");

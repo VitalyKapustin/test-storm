@@ -1,23 +1,30 @@
 package test.storm.entity;
 
+import org.springframework.data.couchbase.core.mapping.Document;
+import org.springframework.data.couchbase.core.mapping.Field;
+
 import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by v.kapustin on 7/30/15.
  */
-public class Transaction implements Serializable {
+@Document
+public class Transaction extends GenericEntity {
 
-    private Long id;
-
+    @Field
     private String customer;
 
+    @Field
     private String account;
 
+    @Field
     private String bank;
 
+    @Field
     private double amount;
 
+    @Field
     private Date date;
 
     public Transaction() { }
@@ -32,15 +39,7 @@ public class Transaction implements Serializable {
 
     @Override
     public String toString() {
-        return new StringBuilder("Transaction [customer=").append(customer).append(", account=").append(account).append(", bank=").append(bank).append(", amount=").append(amount).append(", date=").append(date).append("]").toString();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+        return new StringBuilder("Transaction [id=").append(getId()).append(", customer=").append(customer).append(", account=").append(account).append(", bank=").append(bank).append(", amount=").append(amount).append(", date=").append(date).append("]").toString();
     }
 
     public String getCustomer() {
