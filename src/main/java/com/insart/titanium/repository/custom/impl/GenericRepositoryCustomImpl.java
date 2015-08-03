@@ -1,8 +1,5 @@
 package com.insart.titanium.repository.custom.impl;
 
-import com.couchbase.client.java.document.JsonLongDocument;
-import com.couchbase.client.java.view.ViewQuery;
-import com.couchbase.client.java.view.ViewResult;
 import com.insart.titanium.repository.custom.GenericRepositoryCustom;
 import com.insart.titanium.storm.entity.GenericEntity;
 import com.insart.titanium.storm.entity.Transaction;
