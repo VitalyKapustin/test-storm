@@ -15,3 +15,6 @@
 
 # kill topology
     ./storm kill [topology name]
+
+# storm UI (browser url: http://{nimbus host}:8080)
+    ./storm ui
