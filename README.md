@@ -32,6 +32,8 @@ syncLimit=2
 server.1=192.168.15.30:2888:3888
 server.2=192.168.15.36:2888:3888
 
+Also in dataDir should be file myid with content:
+1 or 2 (depending on server.1 on machine)
 
 * 2. Run Zookeper on both machines one by one: 
 zkServer.cmd
