@@ -41,7 +41,7 @@ public class ApplicationConfig extends AbstractCouchbaseConfiguration {
     }
 
     @Override
-    protected List<String> bootstrapHosts() {
+    protected List<String> getBootstrapHosts() {
         return Collections.singletonList(COUCHBASE_HOST);
     }
 
