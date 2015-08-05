@@ -35,11 +35,6 @@ public class ApplicationConfig extends AbstractCouchbaseConfiguration {
         return new PropertySourcesPlaceholderConfigurer();
     }
 
-    @Bean
-    public ApplicationContextProvider getApplicationContextProvider() {
-        return new ApplicationContextProvider();
-    }
-
     @Override
     protected List<String> bootstrapHosts() {
         return Collections.singletonList(COUCHBASE_HOST);
