@@ -1,6 +1,5 @@
 package com.insart.titanium.repository;
 
-import com.couchbase.client.protocol.views.Query;
 import com.insart.titanium.repository.custom.GenericRepositoryCustom;
 import com.insart.titanium.storm.entity.GenericEntity;
 import org.springframework.data.repository.CrudRepository;
@@ -13,5 +12,5 @@ import java.util.List;
  */
 public interface GenericRepository extends CrudRepository<GenericEntity, String>, GenericRepositoryCustom<GenericEntity, String> {
 
-    public List<GenericEntity> findByDate(Query query);
+//    public List<GenericEntity> findByDate(Query query);
 }
