@@ -1,7 +1,7 @@
 package com.insart.titanium.storm.entity;
 
+import com.couchbase.client.java.repository.annotation.Field;
 import org.springframework.data.couchbase.core.mapping.Document;
-import org.springframework.data.couchbase.core.mapping.Field;
 
 import java.util.Date;
 

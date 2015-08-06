@@ -7,8 +7,11 @@ import backtype.storm.topology.base.BaseRichBolt;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
+import com.insart.titanium.configuration.ApplicationConfig;
 import com.insart.titanium.storm.util.CommonUtils;
 import org.apache.log4j.Logger;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
 import com.insart.titanium.storm.entity.Transaction;
 
@@ -18,10 +21,7 @@ import java.util.Map;
 /**
  * Created by v.kapustin on 7/30/15.
  */
-@Component
 public class TransactionAmountByAccountBolt extends BaseRichBolt {
-
-    private static final Logger LOG = Logger.getLogger(PeriodTransactionsBolt.class);
 
     private OutputCollector _collector;
 
@@ -35,6 +35,7 @@ public class TransactionAmountByAccountBolt extends BaseRichBolt {
         Transaction transaction = (Transaction) input.getValueByField("transaction");
         List<Transaction> transactions = (List<Transaction>) input.getValueByField("periodTransactions");
         double sum = transactions.parallelStream().filter(p -> !p.equals(transaction) && p.getAccount().equals(transaction.getAccount())).mapToDouble(p -> p.getAmount()).sum();
+        Logger LOG = Logger.getLogger(PeriodTransactionsBolt.class);
         LOG.debug(CommonUtils.getLogMessage(TransactionAmountByAccountBolt.class, transaction));
         _collector.emit(input, new Values(transaction, "account", sum));
     }

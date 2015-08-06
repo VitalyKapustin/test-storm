@@ -18,10 +18,7 @@ import java.util.Map;
 /**
  * Created by v.kapustin on 7/31/15.
  */
-@Component
 public class TransactionAmountByBankBolt extends BaseRichBolt {
-
-    private static final Logger LOG = Logger.getLogger(PeriodTransactionsBolt.class);
 
     private OutputCollector _collector;
 
@@ -35,6 +32,7 @@ public class TransactionAmountByBankBolt extends BaseRichBolt {
         Transaction transaction = (Transaction) input.getValueByField("transaction");
         List<Transaction> transactions = (List<Transaction>) input.getValueByField("periodTransactions");
         double sum = transactions.parallelStream().filter(p -> !p.equals(transaction) && p.getBank().equals(transaction.getBank())).mapToDouble(p -> p.getAmount()).sum();
+        Logger LOG = Logger.getLogger(PeriodTransactionsBolt.class);
         LOG.debug(CommonUtils.getLogMessage(TransactionAmountByBankBolt.class, transaction));
         _collector.emit(input, new Values(transaction, "bank", sum));
     }
