@@ -15,7 +15,6 @@ import java.util.Map;
 /**
  * Created by v.kapustin on 7/31/15.
  */
-@Component
 public class LogTransactionSumBolt extends BaseRichBolt {
 
     private static Logger LOG;
@@ -25,7 +24,6 @@ public class LogTransactionSumBolt extends BaseRichBolt {
     @Override
     public void prepare(Map stormConf, TopologyContext context, OutputCollector collector) {
         _collector = collector;
-        LOG = Logger.getLogger(PeriodTransactionsBolt.class);
     }
 
     @Override
@@ -34,6 +32,7 @@ public class LogTransactionSumBolt extends BaseRichBolt {
         String byField = String.valueOf(input.getValueByField("byField"));
         double sum = (double) input.getValueByField("sum");
 //        LOG.debug(new StringBuilder(transaction.toString()).append(" sum by ").append(byField).append(" = ").append(sum));
+        LOG = Logger.getLogger(LogTransactionSumBolt.class);
         LOG.debug(CommonUtils.getLogMessage(LogTransactionSumBolt.class, transaction));
         _collector.ack(input);
     }
